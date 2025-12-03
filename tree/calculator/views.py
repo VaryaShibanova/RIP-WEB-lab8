@@ -18,6 +18,7 @@ def calculate_years(request):
     
     # ЛОГИРОВАНИЕ ДЛЯ ДЕБАГА
     print("=== INCOMING REQUEST TO DJANGO ===")
+    print(f"📦 Generated callback token: {settings.CALLBACK_TOKEN}")
     print("Headers:", dict(request.headers))
     print("Raw body:", request.body)
     
@@ -62,7 +63,8 @@ def calculate_years(request):
         'tree_id': data['tree_id'],
         'total_items': len(data['tree_items']),
         'status': 'processing',
-        'estimated_timing': '5-10 seconds per item'
+        'estimated_timing': '5-10 seconds per item',
+        'callback_token': settings.CALLBACK_TOKEN
     })
 
 def process_all_calculations_async(tree_id, tree_items):
@@ -150,7 +152,7 @@ def calculate_year_for_anomaly(total_rings, anomalous_rings, anomaly_year):
 
 def send_all_results_to_go_service(tree_id, results):
     """Отправка ВСЕХ результатов одним запросом"""
-    callback_url = f"{settings.GO_SERVICE_URL}/api/async/result"
+    callback_url = f"{settings.GO_SERVICE_URL}/api/asynctree/ageresult"
     
     payload = {
         'tree_id': tree_id,
@@ -161,11 +163,12 @@ def send_all_results_to_go_service(tree_id, results):
     }
     
     headers = {
-        'Authorization': 'Bearer abc12345',
+        'Authorization': f'Bearer {settings.CALLBACK_TOKEN}',
         'Content-Type': 'application/json'
     }
     
     print(f"📦 Sending ALL results to Go: {len(results)} items")
+    print(f"   Token used: {settings.CALLBACK_TOKEN}")
     print(f"   Results: {results}")
     
     try:

@@ -1,7 +1,5 @@
-"""
-Django settings for tree_async project.
-"""
-
+"""Django settings for tree_async project."""
+import secrets
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,9 +55,12 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Генерация 8-символьного токена для псевдо-авторизации
+CALLBACK_TOKEN = secrets.token_urlsafe(6)  # 6 байт дают 8 символов в base64
+print(f"📦 Generated async callback token: {CALLBACK_TOKEN}")
+
 # Настройки для взаимодействия с Go сервисом
 GO_SERVICE_URL = "http://localhost:8080"
-CALLBACK_TOKEN = "abc12345"  # Простой токен для псевдо-авторизации
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

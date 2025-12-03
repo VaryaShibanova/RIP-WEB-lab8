@@ -5,5 +5,5 @@ URL configuration for tree_async project.
 from django.urls import path, include
 
 urlpatterns = [
-    path('api/async/', include('calculator.urls')),
+    path('api/asynctree/', include('calculator.urls')),
 ]
