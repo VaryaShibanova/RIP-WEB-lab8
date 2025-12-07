@@ -172,7 +172,7 @@ def send_all_results_to_go_service(tree_id, results):
     print(f"   Results: {results}")
     
     try:
-        response = requests.post(callback_url, json=payload, headers=headers, timeout=30)
+        response = requests.put(callback_url, json=payload, headers=headers, timeout=30)
         print(f"✅ All results sent successfully: {response.status_code}")
         
         # Логируем ответ от Go
